@@ -17,12 +17,12 @@ sudo chown -R ubuntu:ubuntu /data/
 sudo ln -sf /data/web_static/releases/test/ /data/web_static/current
 
 # Create a fake HTML file
-sudo echo "<html>
+echo "<html>
 <head></head>
 <body><p>
 SOMETHING NICE IS COMING HERE SOON!
 </p></body>
-</html>" > /data/web_static/releases/test/index.html
+</html>" | sudo tee /data/web_static/releases/test/index.html
 
 # Backup config and relink symbolic link
 sudo cp -f /etc/nginx/sites-available/default /etc/nginx/sites-available/.default.bak
