@@ -6,25 +6,11 @@ Fabric script that creates and distributes an archive to web servers using the f
 from fabric.api import local, env
 from os.path import exists
 from datetime import datetime
+from 1-pack_web_static import do_pack
 from 2-do_deploy_web_static import do_deploy
 
-env.hosts = ['<IP web-01>', '<IP web-02>']
+env.hosts = ['18.204.13.162', '54.85.22.182']
 
-def do_pack():
-    """
-    Generates a .tgz archive from the contents of the web_static folder.
-    """
-    try:
-        now = datetime.now()
-        archive_name = "web_static_{}{}{}{}{}{}.tgz".format(
-            now.year, now.month, now.day, now.hour, now.minute, now.second)
-
-        local("mkdir -p versions")
-        local("tar -cvzf versions/{} web_static".format(archive_name))
-
-        return "versions/{}".format(archive_name)
-    except Exception as e:
-        return None
 
 def deploy():
     """
