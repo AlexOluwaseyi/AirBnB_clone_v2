@@ -36,20 +36,12 @@ def do_deploy(archive_path):
         # Move files in ./web_static subfolder to parent folder
         run('mv {}/web_static/* {}/'.format(release_folder, release_folder))
 
-        # Delete the symbolic link /data/web_static/current
-        current_link = '/data/web_static/current'
-        run('rm -f {}'.format(current_link))
-
         # Create a new symbolic link to the new version of the code
-        run('ln -s {} {}'.format(release_folder, current_link))
+        current_link = '/data/web_static/current'
+        run('ln -sf {} {}'.format(release_folder, current_link))
 
         print('New version deployed!')
         return True
 
     except Exception as e:
         return False
-
-
-if __name__ == "__main__":
-    # Replace 'your_archive_path' with the actual path to your archive
-    do_deploy(archive_path)
