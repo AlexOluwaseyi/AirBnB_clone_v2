@@ -3,7 +3,6 @@
 
 # Install Nginx if not already installed
 sudo apt-get -y update
-sudo apt-get -y upgrade
 sudo apt-get -y install nginx
 
 # Stop Nginx service
@@ -17,12 +16,12 @@ sudo chown -R ubuntu:ubuntu /data/
 sudo ln -sf /data/web_static/releases/test/ /data/web_static/current
 
 # Create a fake HTML file
-echo "<html>
+sudo echo "<html>
 <head></head>
 <body><p>
 SOMETHING NICE IS COMING HERE SOON!
 </p></body>
-</html>" | sudo tee /data/web_static/releases/test/index.html
+</html>" > /data/web_static/releases/test/index.html
 
 # Backup config and relink symbolic link
 sudo cp -f /etc/nginx/sites-available/default /etc/nginx/sites-available/.default.bak
@@ -30,7 +29,7 @@ sudo cp -f /etc/nginx/sites-enabled/default /etc/nginx/sites-enabled/.default.ba
 sudo ln -sf /etc/nginx/sites-available/default /etc/nginx/sites-enabled/default
 
 # Update the Nginx configuration to serve the content of /data/web_static/current/ to hbnb_static
-sudo sed -i '/listen 80 default_server/a \\tlocation /hbnb_static { \n\t\talias /data/web_static/current/;\n\t}' /etc/nginx/sites-available/default
+sudo sed -i '/server_name _;/a \\tlocation /hbnb_static { \n\t\talias /data/web_static/current/;\n\t}' /etc/nginx/sites-available/default
 
 # Restart Nginx service
 sudo service nginx start
