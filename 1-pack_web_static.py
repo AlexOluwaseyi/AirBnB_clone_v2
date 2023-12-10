@@ -17,7 +17,7 @@ def do_pack():
 
         # Create the archive filename
         now = datetime.utcnow()
-        archive_name = "web_static_{}{}{}{}{}{}.tgz".format(
+        archive_name = "web_static_{}{:02}{:02}{:02}{:02}{:02}.tgz".format(
             now.year, now.month, now.day, now.hour, now.minute, now.second
         )
 
@@ -33,8 +33,8 @@ def do_pack():
         print("web_static packed: versions/{} -> {}Bytes".format(
             archive_name, archive_size
             ))
-
         return archive_path
+
     except Exception as e:
         print(f"Error: {e}")
         return None
