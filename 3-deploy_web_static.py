@@ -6,7 +6,7 @@ servers using the function deploy.
 
 from os.path import exists
 from datetime import datetime
-from fabric.api import env, put, run, sudo, local
+from fabric.api import env, put, run, sudo, local, runs_once
 from os import path
 import os
 
@@ -15,6 +15,7 @@ env.user = 'ubuntu'
 env.key_filename = '/root/.ssh/id_rsa'
 
 
+@runs_once
 def do_pack():
     """Generate a .tgz archive from the contents of web_static."""
     try:
@@ -69,8 +70,10 @@ def do_deploy(archive_path):
 
         # Move files in ./web_static subfolder to parent folder
         run('mv {}/web_static/* {}/'.format(release_folder, release_folder))
+        run('rmdir  {}/web_static'.format(release_folder))
 
         # Create a new symbolic link to the new version of the code
+        run('rm -rf /data/web_static/current')
         current_link = '/data/web_static/current'
         run('ln -sf {} {}'.format(release_folder, current_link))
 
