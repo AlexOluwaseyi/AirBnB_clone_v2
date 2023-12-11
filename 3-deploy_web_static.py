@@ -1,38 +1,18 @@
 #!/usr/bin/python3
 """
-Fabric script that creates and distributes an archive to web servers using the function deploy.
+Fabric script that creates and distributes an archive to web
+servers using the function deploy.
 """
 
-from fabric.api import local, env
 from os.path import exists
 from datetime import datetime
-
-env.hosts = ['18.204.13.162', '54.85.22.182']
-
-
-#!/usr/bin/python3
-"""
-Fabric script that distributes an archive to your web servers, using the
-function do_deploy.
-"""
-
-from fabric.api import env, put, run, sudo
+from fabric.api import env, put, run, sudo, local
 from os import path
+import os
 
 env.hosts = ['18.204.13.162', '54.85.22.182']
 env.user = 'ubuntu'
 env.key_filename = '/root/.ssh/id_rsa'
-
-
-#!/usr/bin/python3
-"""
- a Fabric script that generates a .tgz archive from the contents
- of the web_static folder of your AirBnB Clone repo
- """
-
-from fabric.api import local
-from datetime import datetime
-import os
 
 
 def do_pack():

@@ -15,40 +15,9 @@ env.user = 'ubuntu'
 env.key_filename = '/root/.ssh/id_rsa'
 
 
-def do_pack():
-    """Generate a .tgz archive from the contents of web_static."""
-    try:
-        # Create the 'versions' folder if it doesn't exist
-        local("mkdir -p versions")
-
-        # Create the archive filename
-        now = datetime.utcnow()
-        archive_name = "web_static_{}{:02}{:02}{:02}{:02}{:02}.tgz".format(
-            now.year, now.month, now.day, now.hour, now.minute, now.second
-        )
-
-        # Archive the web_static folder
-        local("tar -cvzf versions/{} web_static".format(archive_name))
-
-        # Return the archive path
-        archive_path = os.path.join("versions", archive_name)
-
-        # Get the size of the created archive
-        archive_size = os.path.getsize("versions/{}".format(archive_name))
-
-        print("web_static packed: versions/{} -> {}Bytes".format(
-            archive_name, archive_size
-            ))
-        return archive_path
-
-    except Exception as e:
-        print(f"Error: {e}")
-        return None
-
-
 def do_deploy(archive_path):
     """Distributes an archive to web servers."""
-    
+
     if not os.path.exists(archive_path):
         print("archive does not exist")
         return False
@@ -70,8 +39,10 @@ def do_deploy(archive_path):
 
         # Move files in ./web_static subfolder to parent folder
         run('mv {}/web_static/* {}/'.format(release_folder, release_folder))
+        run('rmdir  {}/web_static'.format(release_folder))
 
         # Create a new symbolic link to the new version of the code
+        run ('rm -rf /data/web_static/current')
         current_link = '/data/web_static/current'
         run('ln -sf {} {}'.format(release_folder, current_link))
 
@@ -83,7 +54,4 @@ def do_deploy(archive_path):
 
 
 if __name__ == "__main__":
-    archive_path = do_pack()
-    if archive_path:
-        do_deploy(archive_path)
     do_deploy(archive_path)
