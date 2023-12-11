@@ -2,14 +2,17 @@
 #a Bash script that sets up your web servers for the deployment of web_static
 
 # Install Nginx if not already installed
-sudo apt-get -y update
-sudo apt-get -y install nginx
+if ! dpkg -l | grep -q nginx; then
+    sudo apt-get -y update
+    sudo apt-get -y install nginx
+fi
 
 # Stop Nginx service
 sudo service nginx stop
 
 # Create directories and sub-directories and change ownership
-sudo mkdir -p /data/web_static/{releases/test,shared}
+sudo mkdir -p /data/web_static/releases/test
+sudo mkdir -p /data/web_static/shared
 sudo chown -R ubuntu:ubuntu /data/
 
 # Create a symbolic link to /test/ as current
@@ -24,8 +27,6 @@ SOMETHING NICE IS COMING HERE SOON!
 </html>" > /data/web_static/releases/test/index.html
 
 # Backup config and relink symbolic link
-sudo cp -f /etc/nginx/sites-available/default /etc/nginx/sites-available/.default.bak
-sudo cp -f /etc/nginx/sites-enabled/default /etc/nginx/sites-enabled/.default.bak
 sudo ln -sf /etc/nginx/sites-available/default /etc/nginx/sites-enabled/default
 
 # Update the Nginx configuration to serve the content of /data/web_static/current/ to hbnb_static
