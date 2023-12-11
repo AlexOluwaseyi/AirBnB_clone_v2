@@ -42,7 +42,7 @@ def do_deploy(archive_path):
         run('rmdir  {}/web_static'.format(release_folder))
 
         # Create a new symbolic link to the new version of the code
-        run ('rm -rf /data/web_static/current')
+        run('rm -rf /data/web_static/current')
         current_link = '/data/web_static/current'
         run('ln -sf {} {}'.format(release_folder, current_link))
 
