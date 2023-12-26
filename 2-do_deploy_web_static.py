@@ -1,57 +1,54 @@
 #!/usr/bin/python3
 """
-Fabric script that distributes an archive to your web servers, using the
-function do_deploy.
+Fabric script (based on the file 1-pack_web_static.py) that distributes an
+archive to your web servers, using the function do_deploy
 """
-
-
-from fabric.api import env, put, run, sudo
-from datetime import datetime
+from fabric.api import *
 import os
 
-
-env.hosts = ['18.204.13.162', '54.85.22.182']
+env.user = "ubuntu"
+env.hosts = ['54.237.64.177', '52.91.136.101']
 
 
 def do_deploy(archive_path):
-    """Distributes an archive to web servers."""
+    """
+    Upload the archive to the /tmp/ directory of the web server
 
-    # if not os.path.exists(archive_path):
-    #    return False
+    Uncompress the archive to the folder /data/web_static/releases/
+    <archive filename without extension> on the web server
+
+    Delete the archive from the web server
+
+    Delete the symbolic link /data/web_static/current from the web server
+
+    Create a new the symbolic link /data/web_static/current on the web server,
+    linked to the new version of your code (/data/web_static/releases/
+    <archive filename without extension>)
+
+    Returns False if the file at the path archive_path doesn't exist
+    """
+    if not os.path.exists(archive_path):
+        return False
 
     try:
-        if not os.path.exists(archive_path):
-            return False
+        put(archive_path, "/tmp/")
 
-        # Upload the archive to the /tmp/ directory of the web server
-        put(archive_path, '/tmp/')
+        new_path = archive_path.partition(".")[0]
+        new_path = new_path.partition("/")[-1]
+        new_path = f"/data/web_static/releases/{new_path}/"
 
-        # Extract the archive to /data/web_static/releases/<archive_filename>
-        archive_filename = archive_path.split('/')[-1]
-        release_folder = '/data/web_static/releases/{}'.format(
-            archive_filename.split('.')[0]
-            )
-        run('mkdir -p {}'.format(release_folder))
-        run('tar -xzf /tmp/{} -C {}'.format(
-            archive_filename, release_folder)
-            )
+        run(f"mkdir -p {new_path}")
 
-        # Delete the uploaded archive
-        run('sudo rm /tmp/{}'.format(archive_filename))
+        run(f"tar -xzvf /tmp/{archive_path.split('/')[1]} -C {new_path}")
 
-        # Move files in ./web_static subfolder to parent folder
-        run('cp -r {}/web_static/* {}/'.format(
-            release_folder, release_folder)
-            )
-        run('sudo rm -r {}/web_static'.format(release_folder))
+        run(f"rm /tmp/{archive_path.split('/')[-1]}")
 
-        # Create a new symbolic link to the new version of the code
-        run('sudo rm -rf /data/web_static/current')
-        current_link = '/data/web_static/current'
-        run('sudo ln -sf {} {}'.format(release_folder, current_link))
+        run("rm -rf /data/web_static/current")
 
-        print('New version deployed!')
+        run(f"mv {new_path}web_static/* {new_path}")
+        run(f"rm -rf {new_path}web_static/")
+
+        run(f"ln -s {new_path} /data/web_static/current")
         return True
-
-    except Exception as e:
+    except Exception:
         return False
