@@ -5,20 +5,21 @@ function do_deploy.
 """
 
 
-from fabric.api import env, put, run, sudo, local
+from fabric.api import env, put, run, sudo
 from datetime import datetime
 import os
 
 
 env.hosts = ['18.204.13.162', '54.85.22.182']
-#env.user = 'ubuntu'
-#env.key_filename = '/root/.ssh/id_rsa'
+env.user = 'ubuntu'
+env.key_filename = '/root/.ssh/id_rsa'
 
 
 def do_deploy(archive_path):
     """Distributes an archive to web servers."""
 
-    if not os.path.exists(archive_path):
+    #if not os.path.exists(archive_path):
+    if os.path.exists(archive_path) is False:
         return False
 
     try:
