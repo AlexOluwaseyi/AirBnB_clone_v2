@@ -11,7 +11,7 @@ env.hosts = ['18.204.13.162', '54.85.22.182']
 env.user = 'ubuntu'
 env.key_filename = '/root/.ssh/id_rsa'
 
-#@runs_once
+
 def do_clean(number=0):
     """
     Deletes out-of-date archives.

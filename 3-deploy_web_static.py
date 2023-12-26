@@ -102,11 +102,3 @@ def deploy():
         return False
 
     return do_deploy(archive_path)
-
-'''
-if __name__ == '__main__':
-    """
-    Call theh deploy function"
-    """
-    deploy()
-'''
