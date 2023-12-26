@@ -79,7 +79,7 @@ def do_deploy(archive_path):
         current_link = '/data/web_static/current'
         run('sudo ln -sf {} {}'.format(release_folder, current_link))
 
-        sudo chown -R ubuntu:ubuntu /data/
+        run('sudo chown -R ubuntu:ubuntu /data/')
 
         print('New version deployed!')
         return True
