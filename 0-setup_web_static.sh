@@ -13,10 +13,13 @@ sudo service nginx stop
 # Create directories and sub-directories and change ownership
 sudo mkdir -p /data/web_static/releases/test
 sudo mkdir -p /data/web_static/shared
-sudo chown -R ubuntu:ubuntu /data/
+# sudo chown -R ubuntu:ubuntu /data/
 
 # Create a symbolic link to /test/ as current
 sudo ln -sf /data/web_static/releases/test/ /data/web_static/current
+
+# Change ownership of directory and sub-files after creting sym link
+sudo chown -R ubuntu:ubuntu /data/
 
 # Create a fake HTML file
 sudo echo "<html>
