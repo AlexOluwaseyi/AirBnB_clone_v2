@@ -29,7 +29,7 @@ def do_clean(number=0):
         # Keep only the specified number of archives
         local_archives_to_keep = local_archives[:number]
         remote_archives_to_keep = remote_archives[:number]
-  
+
         # Delete unnecessary archives in the versions folder
         for archive in local_archives[number:]:
             local('rm -f versions/{}'.format(archive))

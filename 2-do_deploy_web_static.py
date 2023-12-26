@@ -11,15 +11,12 @@ import os
 
 
 env.hosts = ['18.204.13.162', '54.85.22.182']
-env.user = 'ubuntu'
-env.key_filename = '/root/.ssh/id_rsa'
 
 
 def do_deploy(archive_path):
     """Distributes an archive to web servers."""
 
-    #if not os.path.exists(archive_path):
-    if os.path.exists(archive_path) is False:
+    if not os.path.exists(archive_path):
         return False
 
     try:
@@ -32,19 +29,23 @@ def do_deploy(archive_path):
             archive_filename.split('.')[0]
             )
         run('mkdir -p {}'.format(release_folder))
-        run('tar -xzf /tmp/{} -C {}'.format(archive_filename, release_folder))
+        run('tar -xzf /tmp/{} -C {}'.format(
+            archive_filename, release_folder)
+            )
 
         # Delete the uploaded archive
-        run('rm /tmp/{}'.format(archive_filename))
+        run('sudo rm /tmp/{}'.format(archive_filename))
 
         # Move files in ./web_static subfolder to parent folder
-        run('mv {}/web_static/* {}/'.format(release_folder, release_folder))
-        run('rmdir  {}/web_static'.format(release_folder))
+        run('cp -r {}/web_static/* {}/'.format(
+            release_folder, release_folder)
+            )
+        run('sudo rm -r {}/web_static'.format(release_folder))
 
         # Create a new symbolic link to the new version of the code
-        run('rm -rf /data/web_static/current')
+        run('sudo rm -rf /data/web_static/current')
         current_link = '/data/web_static/current'
-        run('ln -sf {} {}'.format(release_folder, current_link))
+        run('sudo ln -sf {} {}'.format(release_folder, current_link))
 
         print('New version deployed!')
         return True
