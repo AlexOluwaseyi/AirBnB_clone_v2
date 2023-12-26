@@ -10,9 +10,10 @@ from fabric.api import env, put, run, sudo, local, runs_once
 from os import path
 import os
 
+
 env.hosts = ['18.204.13.162', '54.85.22.182']
 env.user = 'ubuntu'
-env.key_filename = '/root/.ssh/id_rsa'
+env.key = '/root/.ssh/id_rsa'
 
 
 @runs_once
@@ -29,6 +30,7 @@ def do_pack():
         )
 
         # Archive the web_static folder
+        print('Packing web_static to versions/{}.tgz'.format(archive_name))
         local("tar -cvzf versions/{} web_static".format(archive_name))
 
         # Return the archive path
@@ -49,13 +51,17 @@ def do_pack():
 
 def do_deploy(archive_path):
     """Distributes an archive to web servers."""
-    if not path.exists(archive_path):
-        print("archive does not exist")
+
+    if not os.path.exists(archive_path):
+        print("no archive")
         return False
 
     try:
+        print("running do_deploy")
+        print(archive_path)
         # Upload the archive to the /tmp/ directory of the web server
         put(archive_path, '/tmp/')
+        print("put successful")
 
         # Extract the archive to /data/web_static/releases/<archive_filename>
         archive_filename = archive_path.split('/')[-1]
@@ -63,19 +69,25 @@ def do_deploy(archive_path):
             archive_filename.split('.')[0]
             )
         run('mkdir -p {}'.format(release_folder))
-        run('tar -xzf /tmp/{} -C {}'.format(archive_filename, release_folder))
+        run('tar -xzf /tmp/{} -C {}'.format(
+            archive_filename, release_folder)
+            )
 
         # Delete the uploaded archive
-        run('rm /tmp/{}'.format(archive_filename))
+        run('sudo rm /tmp/{}'.format(archive_filename))
 
         # Move files in ./web_static subfolder to parent folder
-        run('mv {}/web_static/* {}/'.format(release_folder, release_folder))
-        run('rmdir  {}/web_static'.format(release_folder))
+        run('cp -r {}/web_static/* {}/'.format(
+            release_folder, release_folder)
+            )
+        run('sudo rm -r {}/web_static'.format(release_folder))
 
         # Create a new symbolic link to the new version of the code
-        run('rm -rf /data/web_static/current')
+        run('sudo rm -rf /data/web_static/current')
         current_link = '/data/web_static/current'
-        run('ln -sf {} {}'.format(release_folder, current_link))
+        run('sudo ln -sf {} {}'.format(release_folder, current_link))
+
+        run('sudo chown -R ubuntu:ubuntu /data/')
 
         print('New version deployed!')
         return True
@@ -90,6 +102,15 @@ def deploy():
     """
     archive_path = do_pack()
     if not archive_path:
+        print("no archive")
         return False
 
     return do_deploy(archive_path)
+
+'''
+if __name__ == '__main__':
+    """
+    Call theh deploy function"
+    """
+    deploy()
+'''
