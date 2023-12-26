@@ -53,15 +53,11 @@ def do_deploy(archive_path):
     """Distributes an archive to web servers."""
 
     if not os.path.exists(archive_path):
-        print("no archive")
         return False
 
     try:
-        print("running do_deploy")
-        print(archive_path)
         # Upload the archive to the /tmp/ directory of the web server
         put(archive_path, '/tmp/')
-        print("put successful")
 
         # Extract the archive to /data/web_static/releases/<archive_filename>
         archive_filename = archive_path.split('/')[-1]
