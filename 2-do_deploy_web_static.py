@@ -16,10 +16,13 @@ env.hosts = ['18.204.13.162', '54.85.22.182']
 def do_deploy(archive_path):
     """Distributes an archive to web servers."""
 
-    if not os.path.exists(archive_path):
-        return False
+    # if not os.path.exists(archive_path):
+    #    return False
 
     try:
+        if not os.path.exists(archive_path):
+            return False
+
         # Upload the archive to the /tmp/ directory of the web server
         put(archive_path, '/tmp/')
 
