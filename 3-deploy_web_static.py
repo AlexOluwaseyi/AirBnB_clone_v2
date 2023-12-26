@@ -13,7 +13,7 @@ import os
 
 env.hosts = ['18.204.13.162', '54.85.22.182']
 env.user = 'ubuntu'
-env.key = '/root/.ssh/id_rsa'
+env.key_filename = '/root/.ssh/id_rsa'
 
 
 @runs_once

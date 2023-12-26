@@ -19,31 +19,27 @@ def do_clean(number=0):
     number = int(number)
     if number < 0:
         return
+    elif number == 0 or number == 1:
+        number = 1
 
     try:
         # Get the list of archives in the versions folder
-        local_archives = local('ls -1t versions').splitlines()
-        #remote_archives = run(
-        #        'ls -1t /data/web_static/releases').splitlines()
+        local_archives = os.listdir("versions")
+        remote_archives = run(
+                'ls -1t /data/web_static/releases').splitlines()
 
-        print("Local archives:")
-        print(local_archives)
-        #print("\nRemote archives")
-        #print(remote_archives)
-        
         # Keep only the specified number of archives
         local_archives_to_keep = local_archives[:number]
-        #remote_archives_to_keep = remote_archives[:number]
+        remote_archives_to_keep = remote_archives[:number]
 
         # Delete unnecessary archives in the versions folder
         for archive in local_archives[number:]:
             local('rm -f versions/{}'.format(archive))
 
-        '''
         # Delete unnecessary archives on both web servers
         for archive in remote_archives:
             if archive not in remote_archives_to_keep:
                 run('rm -rf /data/web_static/releases/{}'.format(archive))
-        '''
+
     except Exception as e:
         print(f"Error: {e}")
