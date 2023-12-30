@@ -1,58 +1,54 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <title>AirBnB</title>
-    <meta charset='utf-8'>
-    <link rel="icon" type="image/png" href="../static/images/icon.png">
-    <link rel="stylesheet" type="text/css" href="../static/styles/6-filters.css">
-    <link rel="stylesheet" type="text/css" href="../static/styles/4-common.css">
-    <link rel="stylesheet" type="text/css" href="../static/styles/3-header.css">
-    <link rel="stylesheet" type="text/css" href="../static/styles/3-footer.css">
+    <head>
+        <title>AirBnb Clone</title>
+        <link rel="stylesheet" href="styles/4-common.css">
+        <link rel="stylesheet" href="styles/3-header.css">
+        <link rel="stylesheet" href="styles/3-footer.css">
+        <link rel="stylesheet" href="styles/6-filters.css">
+         <link rel="icon" href="images/icon.png" type="image/png">
     </head>
-  <body>
-    <header>
-      <div class="logo">
-	</div>
-      </header>
-    <div class="container">
-      <section class="filters">
-	<div class="locations">
-	  <h3>States</h3>
-	  <h4>&nbsp;</h4>
-	  <div class="popover">
-	    <ul>
-	      {% for state in states.values()|sort(attribute='name') %}
-	         <li><h2>{{ state.name }}:</h2>
-	    <ul>
-                 {% for city in state.cities|sort(attribute='name') %}
-	         <li>{{ city.name }}</li>
-                 {% endfor %}
-	       </ul>
-	    </li>
-	      {% endfor %}
-	    </ul>
-	    </div>
-	  </div>
-	<div class="amenities">
-	  <h3>Amenities</h3>
-	  <h4>&nbsp;</h4>
-	  <div class="popover">
-	    <ul>
-	       {% for amenity in amenities.values()|sort(attribute='name') %}
-	             <li>{{ amenity.name }}</li>
-	       {% endfor %}
-	    </ul>
-	    </div>
-	  </div>
-	<button class="search_button">
-	  Search
-	  </button>
-	</section>
-      </div>
-    <footer>
-      <div class="centered_footer">Holberton School</div>
-      </footer>
+    <body>
+        <header>
+            <div class="logo"></div>
+        </header>
+        <div class="container">
+            <section class="filters">
+                <button type="button">Search</button>
+                <div class="locations">
+                    <h3>States</h3>
+                    <h4>&nbsp</h4>
+                    <ul class="popover">
+                        <li><h2>Arizona:</h2></li>
+                        <li>
+                            <ul class="popover_list">
+                                <li>Page</li>
+                                <li>Page2</li>
+                            </ul>
+                        </li>
+                        <li><h2>California:</h2></li>
+                        <li>
+                                <ul class="popover_list">
+                                    <li>San Francisco</li>
+                                    <li>Los Altos</li>
+                                </ul>
+                            </li>
+                    </ul>
+                </div>
+                <div class="amenities">
+                    <h3>Amenities</h3>
+                    <h4>&nbsp</h4>
+                    <ul class="popover">
+                        <li>Internet</li>
+                        <li>TV</li>
+                        <li>Kitchen</li>
+                        <li>Iron</li>
+                    </ul>
+                </div>
+            </section>
+        </div>
+        <footer>
+            Best School
+        </footer>
     </body>
 </html>
-
-
