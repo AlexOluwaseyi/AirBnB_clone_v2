@@ -21,9 +21,15 @@ class FileStorage:
 
     def new(self, obj):
         """Adds new object to storage dictionary"""
+        # print("'obj.id: obj'")
+        # print(type(obj.idi: obj))
+        '''
         self.__objects.update(
-            {obj.to_dict()['__class__'] + '.' + obj.id: obj}
-            )
+                {obj.to_dict()['__class__'] + '.' + obj.id: obj}
+            )'''
+        self.__objects["{}.{}".format(obj.__class__.__name__, obj.id)] = obj
+
+
 
     def save(self):
         """Saves storage dictionary to file"""
@@ -69,5 +75,7 @@ class FileStorage:
             del self.__objects[obj_key]
 
     def close(self):
-        """Call the reload method"""
+        """
+        Calls the reload method
+        """
         self.reload()
