@@ -1,4 +1,4 @@
-"""#!/usr/bin/python3"""
+#!/usr/bin/python3
 
 """
 a script that starts a Flask web application
@@ -20,7 +20,12 @@ def states():
     during the project 0x01. AirBnB clone - Web static
     """
     states = storage.all(State)
-    return render_template('10-hbnb_filters.html', states=states)
+    cities = storage.all(City)
+    amenities = storage.all(Amenity)
+    return render_template(
+            '10-hbnb_filters.html', states=states,
+            cities=cities, amenities=amenities
+            )
 
 
 @app.teardown_appcontext
