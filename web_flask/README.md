@@ -11,7 +11,7 @@
 - [x] 6. Odd or even?
 - [x] 7. Improve engines
 - [x] 8. List of states
-- [ ] 9. Cities by states
-- [ ] 10. States and State
-- [ ] 11. HBNB filters
-
+- [x] 9. Cities by states
+- [x] 10. States and State
+- [x] 11. HBNB filters
+- [ ] 12. HBNB is alive!

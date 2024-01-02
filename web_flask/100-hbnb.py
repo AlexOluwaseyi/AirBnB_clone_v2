@@ -9,22 +9,26 @@ from models import storage
 from models.state import State
 from models.city import City
 from models.amenity import Amenity
+from models.place import Place
 
 app = Flask(__name__)
 
 
-@app.route("/hbnb_filters", strict_slashes=False)
-def hbnb_filters():
+@app.route("/hbnb", strict_slashes=False)
+def hbnb():
     """
-    display a HTML page like 6-index.html, which was done
-    during the project 0x01. AirBnB clone - Web static
+    display a HTML page like 8-index.html, done during 
+    the 0x01. AirBnB clone - Web static project
     """
     states = storage.all(State)
     cities = storage.all(City)
     amenities = storage.all(Amenity)
+    places = storage.all(Place)
+
     return render_template(
-            '10-hbnb_filters.html', states=states,
-            cities=cities, amenities=amenities
+            '100-hbnb.html', states=states,
+            cities=cities, amenities=amenities,
+            places=places
             )
 
 
